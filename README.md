@@ -1,3 +1,3 @@
-# (i²)² framework
+# (i²)² Framework
 
 WIP
