@@ -1,3 +1,3 @@
-# i²² framework
+# (i²)² framework
 
 WIP
