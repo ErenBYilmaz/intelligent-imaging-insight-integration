@@ -18,3 +18,9 @@ class DummyImageProcessingTool(ImageProcessingTool):
 
     def process(self, img: Image):
         return DummyProcessingResult(self.name(), {'example_metadata_value': '42'})
+
+    def description(self) -> str:
+        return 'Dummy processing tool. Only returns example DICOM files.'
+
+    def version_id(self) -> str:
+        return '1.0.0'
