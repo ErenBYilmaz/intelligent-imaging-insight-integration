@@ -8,7 +8,7 @@ from processing_result import ProcessingResult
 
 class DummyProcessingResult(ProcessingResult):
     def to_dicom(self):
-        return listdir_fullpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),
+        return listdir_fullpath(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
                                              'resources', 'example_dcm'))
 
 

@@ -9,4 +9,4 @@ class ProcessingResult:
         self.metadata = metadata
 
     def to_dicom(self) -> List[str]:
-        raise NotImplementedError('TO DO')
+        raise NotImplementedError('Abstract method')

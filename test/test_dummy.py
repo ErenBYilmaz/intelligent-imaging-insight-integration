@@ -1,9 +1,10 @@
 import unittest
 
+from examples.tools.dummy.dummy import DummyImageProcessingTool
+
 
 class TestDummyProcessingTool(unittest.TestCase):
     def test_dummy(self):
-        from tools.dummy import DummyImageProcessingTool, DummyProcessingResult
         from image import Image
 
         tool = DummyImageProcessingTool()
@@ -18,11 +19,9 @@ class TestDummyProcessingTool(unittest.TestCase):
             assert slice.endswith('.dcm')
 
     def test_version_present(self):
-        from tools.dummy import DummyImageProcessingTool
         tool = DummyImageProcessingTool()
         assert '0' in tool.version_id()
 
     def test_description_present(self):
-        from tools.dummy import DummyImageProcessingTool
         tool = DummyImageProcessingTool()
         assert len(tool.description()) > 0

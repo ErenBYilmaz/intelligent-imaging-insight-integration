@@ -11,5 +11,6 @@ class Image:
     def as_sitk_image(self) -> SimpleITK.Image:
         return SimpleITK.ReadImage(self.nii_path)
 
-    def from_dcm_slices(self, dcm_slice_paths: List[str], nii_path, extra_metadata: Dict[str, Any] = None):
+    @classmethod
+    def from_dcm_slices(cls, dcm_slice_paths: List[str], nii_path, extra_metadata: Dict[str, Any] = None):
         raise NotImplementedError('TO DO')
