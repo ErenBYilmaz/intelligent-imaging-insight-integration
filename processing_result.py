@@ -19,6 +19,7 @@ class SegmentationResult(ProcessingResult):
 
 class PDFResult(ProcessingResult):
     def __init__(self, tool_name: str, pdf_path: str, metadata: Dict[str, Any] = None):
+        super().__init__(tool_name, metadata)
         self.pdf_path = pdf_path
 
     def to_dicom(self) -> List[str]:
