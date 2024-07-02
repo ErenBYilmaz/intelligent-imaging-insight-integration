@@ -1,0 +1,32 @@
+FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+
+# run with:
+# docker build -t ${USER}_container_torch --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) --build-arg USERNAME=$(whoami) . -f DockerfileTorch
+# docker run -it --rm --gpus all --user "$(id -u):$(id -g)" --ipc=host -v $(pwd):/code ${USER}_container_torch
+
+ENV PYTHONPATH="/code/"
+
+# Make RUN commands use `bash --login`:
+SHELL ["/bin/bash", "--login", "-c"]
+
+# otherwise apt-get may ask for time zone information
+ENV DEBIAN_FRONTEND=noninteractive
+# some useful tools
+RUN apt-get update && apt-get install curl git unzip graphviz nano -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y && rm -rf /var/lib/apt/lists/*
+
+
+# create current user inside image, so that newly created files belong to us and not to root and can be accessed outside docker as well
+ARG USER_ID
+ARG GROUP_ID
+ARG USERNAME
+RUN addgroup --gid $GROUP_ID $USERNAME && adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USERNAME && usermod -a -G root $USERNAME && addgroup --gid 1011 data-acc && usermod -a -G data-acc $USERNAME
+USER $USERNAME
+
+# Create environment
+RUN pip install hanging_threads colorama matplotlib numpy pandas cachetools tabulate yappi graphviz joblib scipy gitpython markdown2 seaborn psutil pydot numba scikit-learn scikit-image pygments natsort voluptuous humanfriendly coloredlogs simpleitk itk openpyxl jupyterlab jupyter "xlrd < 2" pydot pydicom click sympy lifelines dill plotly wandb pycryptodome schedule
+# outside of docker you also need:
+RUN pip install pytorch-lightning einops perceiver-pytorch transformers datasets torchview monai kornia scikit-survival
+RUN pip install opencv-python
+
+WORKDIR /code

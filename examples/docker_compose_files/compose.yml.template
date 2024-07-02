@@ -1,0 +1,14 @@
+services:
+  image_processing_tool:
+    image: image_processing_tool_network
+    ports:
+      - "104"
+    networks:
+      - image_processing_tool_network
+
+volumes:
+  - ./:/app
+
+networks:
+  # The presence of these objects is sufficient to define them
+  image_processing_tool_network: {}
