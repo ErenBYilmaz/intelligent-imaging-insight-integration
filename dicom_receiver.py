@@ -20,8 +20,21 @@ def main():
         ds = event.dataset
         ds.file_meta = event.file_meta
 
+        # Extract patient ID, study instance UID, and series instance UID
+        patient_id = ds.PatientID
+        study_instance_uid = ds.StudyInstanceUID
+        series_instance_uid = ds.SeriesInstanceUID
+
+        # Create directory structure
+        patient_directory = os.path.join(output_directory, patient_id)
+        study_directory = os.path.join(patient_directory, study_instance_uid)
+        series_directory = os.path.join(study_directory, series_instance_uid)
+
+        # Ensure the directories exist
+        os.makedirs(series_directory, exist_ok=True)
+
         # Create a filename based on the SOP Instance UID
-        filename = os.path.join(output_directory, f"{ds.SOPInstanceUID}.dcm")
+        filename = os.path.join(series_directory, f"{ds.SOPInstanceUID}.dcm")
 
         # Save the DICOM file
         ds.save_as(filename, write_like_original=False)
