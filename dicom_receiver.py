@@ -31,7 +31,8 @@ def main():
         return 0x0000
 
     # Set up the application entity (AE)
-    ae = AE()
+    title = 'PYTHON_AET'
+    ae = AE(ae_title=title)
 
     # Add the supported presentation contexts
     ae.supported_contexts = StoragePresentationContexts + VerificationPresentationContexts
@@ -42,8 +43,9 @@ def main():
     ]
 
     # Start listening for incoming association requests
-    print("Starting DICOM node on port 104...")
-    ae.start_server(('', 104), evt_handlers=handlers, block=True)
+    port = 104
+    print(f"Starting DICOM node {title} on port {port}...")
+    ae.start_server(('', port), evt_handlers=handlers, block=True)
 
 
 if __name__ == '__main__':

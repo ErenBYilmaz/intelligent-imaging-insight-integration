@@ -17,7 +17,7 @@ def main():
     # Define the destination PACS server details
     pacs_address = '127.0.0.1'
     pacs_port = 104
-    pacs_aet = 'PACS_AET'
+    pacs_aet = 'PYTHON_AET'
 
     # Set up the application entity (AE)
     ae = AE()
