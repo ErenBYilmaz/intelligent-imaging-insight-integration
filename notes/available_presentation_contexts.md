@@ -1,0 +1,130 @@
+# Available Storage Contexts
+
+- Computed Radiography Image Storage
+- Encapsulated PDF Storage
+- Encapsulated CDA Storage
+- Encapsulated STL Storage
+- Encapsulated OBJ Storage
+- Encapsulated MTL Storage
+- X-Ray Angiographic Image Storage
+- Enhanced XA Image Storage
+- X-Ray Radiofluoroscopic Image Storage
+- Enhanced XRF Image Storage
+- Positron Emission Tomography Image Storage
+- X-Ray 3D Angiographic Image Storage
+- X-Ray 3D Craniofacial Image Storage
+- Breast Tomosynthesis Image Storage
+- Enhanced PET Image Storage
+- CT Image Storage
+- Enhanced CT Image Storage
+- Nuclear Medicine Image Storage
+- Ultrasound Multi-frame Image Storage
+- Parametric Map Storage
+- MR Image Storage
+- Enhanced MR Image Storage
+- MR Spectroscopy Storage
+- Enhanced MR Color Image Storage
+- RT Image Storage
+- RT Physician Intent Storage
+- RT Segment Annotation Storage
+- RT Radiation Set Storage
+- C-Arm Photon-Electron Radiation Storage
+- Tomotherapeutic Radiation Storage
+- Robotic-Arm Radiation Storage
+- Tomotherapeutic Radiation Record Storage
+- C-Arm Photon-Electron Radiation Record Storage
+- RT Dose Storage
+- Robotic Radiation Record Storage
+- RT Radiation Set Delivery Instruction Storage
+- RT Treatment Preparation Storage
+- Enhanced RT Image Storage
+- Enhanced Continuous RT Image Storage
+- RT Patient Position Acquisition Instruction Storage
+- RT Structure Set Storage
+- RT Beams Treatment Record Storage
+- RT Plan Storage
+- RT Brachy Treatment Record Storage
+- RT Treatment Summary Record Storage
+- RT Ion Plan Storage
+- RT Ion Beams Treatment Record Storage
+- Ultrasound Image Storage
+- Enhanced US Volume Storage
+- 1.2.840.10008.5.1.4.1.1.6.3
+- Raw Data Storage
+- Spatial Registration Storage
+- Spatial Fiducials Storage
+- Deformable Spatial Registration Storage
+- Segmentation Storage
+- Surface Segmentation Storage
+- Tractography Results Storage
+- Real World Value Mapping Storage
+- Surface Scan Mesh Storage
+- Surface Scan Point Cloud Storage
+- Secondary Capture Image Storage
+- Multi-frame Single Bit Secondary Capture Image Storage
+- Multi-frame Grayscale Byte Secondary Capture Image Storage
+- Multi-frame Grayscale Word Secondary Capture Image Storage
+- Multi-frame True Color Secondary Capture Image Storage
+- VL Endoscopic Image Storage
+- Video Endoscopic Image Storage
+- VL Microscopic Image Storage
+- Video Microscopic Image Storage
+- VL Slide-Coordinates Microscopic Image Storage
+- VL Photographic Image Storage
+- Video Photographic Image Storage
+- Ophthalmic Photography 8 Bit Image Storage
+- Ophthalmic Photography 16 Bit Image Storage
+- Stereometric Relationship Storage
+- Ophthalmic Tomography Image Storage
+- Wide Field Ophthalmic Photography Stereographic Projection Image Storage
+- Wide Field Ophthalmic Photography 3D Coordinates Image Storage
+- Ophthalmic Optical Coherence Tomography En Face Image Storage
+- Ophthalmic Optical Coherence Tomography B-scan Volume Analysis Storage
+- VL Whole Slide Microscopy Image Storage
+- Dermoscopic Photography Image Storage
+- Lensometry Measurements Storage
+- Autorefraction Measurements Storage
+- Keratometry Measurements Storage
+- Subjective Refraction Measurements Storage
+- Visual Acuity Measurements Storage
+- Spectacle Prescription Report Storage
+- Ophthalmic Axial Measurements Storage
+- Intraocular Lens Calculations Storage
+- Macular Grid Thickness and Volume Report Storage
+- Ophthalmic Visual Field Static Perimetry Measurements Storage
+- Ophthalmic Thickness Map Storage
+- Corneal Topography Map Storage
+- Basic Text SR Storage
+- Enhanced SR Storage
+- Comprehensive SR Storage
+- Comprehensive 3D SR Storage
+- Extensible SR Storage
+- Mammography CAD SR Storage
+- Chest CAD SR Storage
+- X-Ray Radiation Dose SR Storage
+- Radiopharmaceutical Radiation Dose SR Storage
+- Colon CAD SR Storage
+- Implantation Plan SR Storage
+- Acquisition Context SR Storage
+- Simplified Adult Echo SR Storage
+- Patient Radiation Dose SR Storage
+- Enhanced X-Ray Radiation Dose SR Storage
+- 12-lead ECG Waveform Storage
+- General ECG Waveform Storage
+- Ambulatory ECG Waveform Storage
+- 1.2.840.10008.5.1.4.1.1.9.1.4
+- Hemodynamic Waveform Storage
+- Cardiac Electrophysiology Waveform Storage
+- Basic Voice Audio Waveform Storage
+- General Audio Waveform Storage
+- Arterial Pulse Waveform Storage
+- Respiratory Waveform Storage
+- Multi-channel Respiratory Waveform Storage
+- Routine Scalp Electroencephalogram Waveform Storage
+- Electromyogram Waveform Storage
+- Electrooculogram Waveform Storage
+- Sleep Electroencephalogram Waveform Storage
+- Body Position Waveform Storage
+- Microscopy Bulk Simple Annotations Storage
+- RT Brachy Application Setup Delivery Instruction Storage
+- RT Beams Delivery Instruction Storage
