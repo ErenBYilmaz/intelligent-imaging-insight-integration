@@ -5,19 +5,41 @@ from pydicom.dataset import Dataset
 from pynetdicom import AE, StoragePresentationContexts, VerificationPresentationContexts
 
 
-def main():
+class SenderConfiguration:
+    def __init__(self, input_directory: str, pacs_address: str, pacs_port: int, pacs_aet: str):
+        self.input_directory = input_directory
+        self.pacs_address = pacs_address
+        self.pacs_port = pacs_port
+        self.pacs_aet = pacs_aet
+
+
+class SendToLocalPython(SenderConfiguration):
+    def __init__(self):
+        super().__init__(input_directory="resources/example_dcm",
+                         pacs_address='127.0.0.1',
+                         pacs_port=104,
+                         pacs_aet='PYTHON_AET', )
+
+
+class SendToNicosOrthanC(SenderConfiguration):
+    def __init__(self):
+        super().__init__(input_directory="resources/example_dcm",
+                         pacs_address='192.168.10.200',
+                         pacs_port=104,
+                         pacs_aet='ORTHANCA', )
+
+
+def main(config: SenderConfiguration):
     # Configure logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('pynetdicom')
     logger.setLevel(logging.DEBUG)
 
-    # Define the directory containing the DICOM files to send
-    input_directory = "resources/example_dcm"
-
-    # Define the destination PACS server details
-    pacs_address = '127.0.0.1'
-    pacs_port = 104
-    pacs_aet = 'PYTHON_AET'
+    # Unpack the configuration
+    input_directory = config.input_directory
+    pacs_address = config.pacs_address
+    pacs_port = config.pacs_port
+    pacs_aet = config.pacs_aet
 
     # Set up the application entity (AE)
     ae = AE()
@@ -57,4 +79,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(SendToNicosOrthanC())
