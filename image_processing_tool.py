@@ -1,3 +1,5 @@
+from typing import List
+
 from image import Image
 from processing_result import ProcessingResult
 
@@ -15,5 +17,5 @@ class ImageProcessingTool:
     def can_process_image(self, img: Image) -> bool:
         raise NotImplementedError('Abstract method')
 
-    def process(self, img: Image) -> ProcessingResult:
+    def process(self, images: List[Image]) -> ProcessingResult:
         raise NotImplementedError('Abstract method')

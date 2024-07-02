@@ -1,4 +1,5 @@
 import os.path
+from typing import List
 
 from image import Image
 from image_processing_tool import ImageProcessingTool
@@ -16,7 +17,7 @@ class DummyImageProcessingTool(ImageProcessingTool):
     def can_process_image(self, img: Image):
         return True
 
-    def process(self, img: Image):
+    def process(self, images: List[Image]) -> ProcessingResult:
         return DummyProcessingResult(self.name(), {'example_metadata_value': '42'})
 
     def description(self) -> str:
