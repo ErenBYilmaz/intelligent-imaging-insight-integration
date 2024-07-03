@@ -43,15 +43,13 @@ class WatchDog(threading.Thread):
                 study_path = os.path.join(patient_path, study_id)
                 for series_id in os.listdir(study_path):
                     series_path = os.path.join(study_path, series_id)
-                    for image_id in os.listdir(series_path):
-                        image_path = os.path.join(series_path, image_id)
-                        if os.path.isfile(os.path.join(image_path, 'is_processed.txt')):
-                            continue
-                        for file in listdir_fullpath(image_path):
-                            if file not in self.known_received_files:
-                                self.known_received_files.add(file)
-                                self.latest_time_of_new_received_files = time.time()
-                        results.append(image_path)
+                    if os.path.isfile(os.path.join(series_path, 'is_processed.txt')):
+                        continue
+                    for file in listdir_fullpath(series_path):
+                        if file not in self.known_received_files:
+                            self.known_received_files.add(file)
+                            self.latest_time_of_new_received_files = time.time()
+                    results.append(series_path)
         return results
 
     def nothing_received_for_60_seconds(self):
