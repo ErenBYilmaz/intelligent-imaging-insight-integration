@@ -42,6 +42,7 @@ class WatchDog(threading.Thread):
                         continue
                     logging.info(f'Processing images of patient {patient_id}.')
                     images = [Image.from_dcm_directory(image_path) for image_path in filtered_paths]
+                    images = [img for img in images if self.image_processing_tool.can_process_image(img)]
                     result = self.image_processing_tool.process(images)
                     logging.info(f'Done processing {len(images)} images of patient {patient_id}.')
                     dcm_paths = result.to_dicom()
