@@ -10,6 +10,9 @@ print('Hello world!')
 print('Hello world!')
 print('Hello world!')
 print('Hello world!')
+#with open('aibutton.js', 'r') as file:
+#    data = file.read()
+#    print(data)
 
 def ExecutePython(output, uri, **request):
     s = 'Python version: %s' % platform.python_version()
@@ -23,10 +26,10 @@ orthanc.RegisterRestCallback('/execute-python', ExecutePython)
 orthanc.ExtendOrthancExplorer('''
 $( document ).ready(function() {
   setInterval(() => {
-    if(!document.getElementById('sample-python-button') && document.getElementById('stow-study')){
-        $('#sample-python-button').remove();                              
+    if(!document.getElementById('executeAiAssist') && document.getElementById('stow-study')){
+        $('#executeAiAssist').remove();                              
         var b = $('<a>')
-        .attr('id', 'sample-python-button')
+        .attr('id', 'executeAiAssist')
         .attr('data-role', 'button')
         .attr('href', '#')
         .attr('data-icon', 'forward')
@@ -49,7 +52,8 @@ $( document ).ready(function() {
                                 $.post('../execute-python', url, 
                               
                                     function(answer) {
-                                        /*put your code after python here*/
+                                        /*put your after python code here*/
+                                        window.open("C:\Users\info\PycharmProjects\DentalMaskRcnn\results\example_tooth.png");
                                         alert('Das hat alles wunderbar geklappt! YAY!');
                                     });
                               
@@ -67,7 +71,13 @@ $( document ).ready(function() {
             }
             
         });
-
+        $(document).keydown(function(event) {
+            if (event.altKey && event.which === 88)
+            {
+                b.click()
+                e.preventDefault();
+            }
+        });
         b.insertAfter($('#stow-study'));                      
     } 
                                                  
