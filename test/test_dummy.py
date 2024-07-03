@@ -1,6 +1,8 @@
+import os.path
 import unittest
 
 from examples.tools.dummy.dummy import DummyImageProcessingTool
+from paths import resources_path
 
 
 class TestDummyProcessingTool(unittest.TestCase):
@@ -8,9 +10,11 @@ class TestDummyProcessingTool(unittest.TestCase):
         from image import Image
 
         tool = DummyImageProcessingTool()
-        img = Image('dummy.nii', {'example_metadata_key': 'value'})
+        img = Image('dummy.nii',
+                    metadata={'example_metadata_key': 'value'},
+                    base_dcm_dir=os.path.join(resources_path, 'example_dcm'))
         self.assertTrue(tool.can_process_image(img))
-        result = tool.process(img)
+        result = tool.process([img])
         self.assertEqual(result.tool_name, 'DummyImageProcessingTool')
         self.assertEqual(result.metadata, {'example_metadata_value': '42'})
         dcm_output = result.to_dicom()

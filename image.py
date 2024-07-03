@@ -8,12 +8,16 @@ from paths import temporary_files_path
 
 
 class Image:
-    def __init__(self, nii_path, metadata: Dict[str, Any]):
+    def __init__(self, nii_path, base_dcm_dir:str, metadata: Dict[str, Any]):
         self.nii_path = nii_path
         self.metadata = metadata
+        self.base_dcm_dir = base_dcm_dir
 
     def as_sitk_image(self) -> SimpleITK.Image:
         return SimpleITK.ReadImage(self.nii_path)
+
+    def as_numpy(self):
+        return SimpleITK.GetArrayFromImage(self.as_sitk_image())
 
     @classmethod
     def from_dcm_slices(cls, dcm_slice_paths: List[str], nii_path, extra_metadata: Dict[str, Any] = None):

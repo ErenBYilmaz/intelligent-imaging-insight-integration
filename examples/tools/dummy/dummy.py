@@ -1,10 +1,14 @@
 import os.path
 from typing import List
 
+import SimpleITK
+import numpy
+
 from image import Image
 from image_processing_tool import ImageProcessingTool
 from lib.util import listdir_fullpath
-from processing_result import ProcessingResult
+from paths import examples_path
+from processing_result import ProcessingResult, SegmentationResult
 
 
 class DummyProcessingResult(ProcessingResult):
@@ -25,3 +29,18 @@ class DummyImageProcessingTool(ImageProcessingTool):
 
     def version_id(self) -> str:
         return '1.0.0'
+
+
+class DummySegmentationGenerator(DummyImageProcessingTool):
+    def process(self, images: List[Image]) -> ProcessingResult:
+        assert len(images) == 1
+        img = images[0]
+        a = img.as_numpy()
+        mask = numpy.random.randint(0, 2, a.shape)
+        mask_img = self.mask_to_image(mask, img.as_sitk_image())
+        mask_img_path = os.path.join(img.base_dcm_dir, 'dummy_seg.nii')
+        SimpleITK.WriteImage(mask_img, mask_img_path)
+        return SegmentationResult(tool_name=self.name(),
+                                  segmentation_nii_path=mask_img_path,
+                                  template_json_path=os.path.join(examples_path, 'dcm_seg_template.json'),
+                                  base_dcm_dir_path=img.base_dcm_dir)
