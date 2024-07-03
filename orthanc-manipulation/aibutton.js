@@ -17,11 +17,12 @@ function executeAiAssist(study){
     }
     else{
 
-        $.post('../execute-python', study, 
-                                      
+        $.post('../execute-python', study,                                       
             function(answer) {
                 /*put your after python code here*/
-                window.open("C:\Users\info\PycharmProjects\DentalMaskRcnn\results\example_tooth.png");
+                window.open("/ohif/viewer?url=../studies/"+getQueryVariable("uuid")+"/ohif-dicom-json")
+                window.open("C:\Users\info\PycharmProjects\DentalMaskRcnn\results\example_tooth.png");              
+                    
                 
                 alert('Das hat alles wunderbar geklappt! YAY!');
             }
