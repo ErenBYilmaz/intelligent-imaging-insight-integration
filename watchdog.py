@@ -38,6 +38,8 @@ class WatchDog(threading.Thread):
             if self.nothing_received_since() > 10:
                 for patient_id in self.received_patient_ids():
                     filtered_paths = [p for p in image_paths if patient_id in p]
+                    if len(filtered_paths) == 0:
+                        continue
                     logging.info(f'Processing images of patient {patient_id}.')
                     images = [Image.from_dcm_directory(image_path) for image_path in filtered_paths]
                     result = self.image_processing_tool.process(images)
