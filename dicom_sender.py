@@ -29,6 +29,14 @@ class SendToNicosOrthanC(SenderConfiguration):
                          pacs_aet='ORTHANCA', )
 
 
+class SendToNicosRaspberryPi(SenderConfiguration):
+    def __init__(self):
+        super().__init__(input_directory="resources/example_dcm",
+                         pacs_address='192.168.10.203',
+                         pacs_port=104,
+                         pacs_aet='ORTHANCA', )
+
+
 def main(config: SenderConfiguration):
     # Configure logging
     logging.basicConfig(level=logging.INFO)
@@ -79,4 +87,4 @@ def main(config: SenderConfiguration):
 
 
 if __name__ == '__main__':
-    main(SendToNicosOrthanC())
+    main(SendToNicosRaspberryPi())
