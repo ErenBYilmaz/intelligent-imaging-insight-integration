@@ -1,3 +1,35 @@
+function getQueryVariable(variable) {
+    var query = window.location.href.split("?")[1]
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+      var pair = vars[i].split("=");
+      if (pair[0] == variable) {
+        return pair[1];
+      }
+    } 
+    return undefined
+  }
+
+
+function executeAiAssist(study){
+    if(study==="" || study===undefined){
+        alert("study id konnte nicht geladen werden.")
+    }
+    else{
+
+        $.post('../execute-python', study, 
+                                      
+            function(answer) {
+                /*put your after python code here*/
+                window.open("C:\Users\info\PycharmProjects\DentalMaskRcnn\results\example_tooth.png");
+                
+                alert('Das hat alles wunderbar geklappt! YAY!');
+            }
+        );
+    }
+    
+}
+
 $( document ).ready(function() {
   setInterval(() => {
     if(!document.getElementById('executeAiAssist') && document.getElementById('stow-study')){
@@ -10,40 +42,9 @@ $( document ).ready(function() {
         .attr('data-theme', 'a')
         .text('Execute AI Assist')
         .button()
-        .click(function(e) {
-            let copyButton = document.getElementById("study-archive-link")
-            if(copyButton!==undefined){
-                copyButton.click()
-                setTimeout(() => {
-                    navigator.clipboard.read().then((clipboardContents)=>{
-                        for (const item of clipboardContents) {
-                            if (!item.types.includes("text/plain")) {
-                                throw new Error("Clipboard does not contain PNG image data.");
-                            }
-                            item.getType("text/plain").then(blob => {
-                                console.log(blob)
-                              blob.text().then(url => {
-                                $.post('../execute-python', url, 
-                              
-                                    function(answer) {
-                                        /*put your after python code here*/
-                                        window.open("C:\Users\info\PycharmProjects\DentalMaskRcnn\results\example_tooth.png");
-                                        alert('Das hat alles wunderbar geklappt! YAY!');
-                                    });
-                              
-                                
-                              })
-                            });
-                        }      
-                           
-                            
-                    
-                     
-                    });        
-                },100)
-                
-            }
-            
+        .click(function(e) {            
+            const uuid = getQueryVariable("uuid")
+            executeAiAssist(uuid)
         });
         $(document).keydown(function(event) {
             if (event.altKey && event.which === 88)
