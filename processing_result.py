@@ -64,21 +64,20 @@ class SegmentationResult(ProcessingResult):
                     template_dict[k] = dcm_image_metadata.GetMetaData(tag_map[k])
                 else:
                     del template_dict[k]
-        template_dict['SegmentAlgorithmName'] = self.tool_name
         assert isinstance(template_dict['SeriesNumber'], str)
-        template_dict['SeriesNumber'] = str(random.randint(template_dict['SeriesNumber'] + 1,
-                                                           template_dict['SeriesNumber'] + 2 ** 20))
+        template_dict['SeriesNumber'] = str(random.randint(int(template_dict['SeriesNumber']) + 1,
+                                                           int(template_dict['SeriesNumber']) + 2 ** 20))
         template = pydicom_seg.template.from_dcmqi_metainfo(template_dict)
         return template
 
-    def output_dcm_path(self):
-        raise NotImplementedError('TO DO')
+    def output_dcm_seg_path(self):
+        return os.path.join(self.base_dcm_dir_path, self.tool_name + '.dcm')
 
     def nii_to_dcm_seg(self):
         """
         Source https://razorx89.github.io/pydicom-seg/guides/write.html
         """
-        to_dcm_seg_path = self.output_dcm_path()
+        to_dcm_seg_path = self.output_dcm_seg_path()
         # dcm_image = self.read_dcm(base_dcm_dir_path)
         dcm_image_metadata = self.read_dcm_metadata(self.base_dcm_dir_path)
 

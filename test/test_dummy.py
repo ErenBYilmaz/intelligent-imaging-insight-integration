@@ -10,7 +10,7 @@ class TestDummyProcessingTool(unittest.TestCase):
         from image import Image
 
         tool = DummyImageProcessingTool()
-        img = Image('dummy.nii',
+        img = Image('dummy.nii.gz',
                     metadata={'example_metadata_key': 'value'},
                     base_dcm_dir=os.path.join(resources_path, 'example_dcm'))
         self.assertTrue(tool.can_process_image(img))

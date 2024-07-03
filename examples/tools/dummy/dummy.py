@@ -32,13 +32,14 @@ class DummyImageProcessingTool(ImageProcessingTool):
 
 
 class DummySegmentationGenerator(DummyImageProcessingTool):
+
     def process(self, images: List[Image]) -> ProcessingResult:
         assert len(images) == 1
         img = images[0]
         a = img.as_numpy()
-        mask = numpy.random.randint(0, 2, a.shape)
+        mask = numpy.random.randint(0, 2, a.shape, dtype=numpy.uint8)
         mask_img = self.mask_to_image(mask, img.as_sitk_image())
-        mask_img_path = os.path.join(img.base_dcm_dir, 'dummy_seg.nii')
+        mask_img_path = os.path.join(img.base_dcm_dir, 'dummy_seg.nii.gz')
         SimpleITK.WriteImage(mask_img, mask_img_path)
         return SegmentationResult(tool_name=self.name(),
                                   segmentation_nii_path=mask_img_path,

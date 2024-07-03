@@ -19,9 +19,9 @@ class TestWatchDog(unittest.TestCase):
         tool = DummyImageProcessingTool()
         dog = WatchDog(tool, base_received_images_path=temporary_files_path)
         assert len(dog.unprocessed_image_paths()) > 0
-        assert not dog.nothing_received_for_60_seconds()
+        assert not dog.nothing_received_since() > 60
         dog.latest_time_of_new_received_files -= 61
-        assert dog.nothing_received_for_60_seconds()
+        assert dog.nothing_received_since() > 60
 
     def test_watching(self):
         tool = DummyImageProcessingTool()

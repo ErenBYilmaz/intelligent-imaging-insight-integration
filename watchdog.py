@@ -2,10 +2,10 @@ import os
 import threading
 import time
 from math import inf
-from typing import List, Set, Optional
+from typing import Set, Optional
 
-from dicom_sender import SenderConfiguration
-from examples.tools.dummy.dummy import DummyImageProcessingTool
+from dicom_sender import SenderConfiguration, Sender
+from examples.tools.dummy.dummy import DummySegmentationGenerator
 from image import Image
 from image_processing_tool import ImageProcessingTool
 from lib.my_logger import logging
@@ -18,7 +18,7 @@ class WatchDog(threading.Thread):
                  image_processing_tool: ImageProcessingTool,
                  interval=1.,
                  base_received_images_path='temporary_files/received_dicom_files',
-                 send_to: Optional[SenderConfiguration] = None,
+                 send_to: Optional[Sender] = None,
                  daemon=False):
         threading.Thread.__init__(self, daemon=daemon)
         self.interval = interval
@@ -35,7 +35,7 @@ class WatchDog(threading.Thread):
             if len(image_paths) == 0:
                 continue
             print(f'Nothing received since {self.nothing_received_since():.1f}s', )
-            if self.nothing_received_for_60_seconds():
+            if self.nothing_received_since() > 10:
                 for patient_id in self.received_patient_ids():
                     filtered_paths = [p for p in image_paths if patient_id in p]
                     logging.info(f'Processing images of patient {patient_id}.')
@@ -46,8 +46,14 @@ class WatchDog(threading.Thread):
                     if self.send_to is not None:
                         self.send_to.send(dcm_paths)
                     for image_path in filtered_paths:
-                        open(os.path.join(image_path, 'is_processed.txt'), 'a').close()
+                        open(self.processing_note_path(image_path), 'a').close()
             time.sleep(self.interval)
+
+    def processing_note_path(self, image_path):
+        return os.path.join(image_path, f'was_processed_by_{self.tool_name()}.txt')
+
+    def tool_name(self):
+        return self.image_processing_tool.name()
 
     def unprocessed_image_paths(self):
         results = []
@@ -57,7 +63,7 @@ class WatchDog(threading.Thread):
                 study_path = os.path.join(patient_path, study_id)
                 for series_id in os.listdir(study_path):
                     series_path = os.path.join(study_path, series_id)
-                    if os.path.isfile(os.path.join(series_path, 'is_processed.txt')):
+                    if os.path.isfile(self.processing_note_path(series_path)):
                         continue
                     for file in listdir_fullpath(series_path):
                         if file not in self.known_received_files:
@@ -66,9 +72,6 @@ class WatchDog(threading.Thread):
                             self.latest_time_of_new_received_files = time.time()
                     results.append(series_path)
         return results
-
-    def nothing_received_for_60_seconds(self):
-        return self.nothing_received_since() > 60
 
     def nothing_received_since(self):
         current_time = time.time()
@@ -82,7 +85,7 @@ class WatchDog(threading.Thread):
 
 
 def main():
-    tool = DummyImageProcessingTool()
+    tool = DummySegmentationGenerator()
     dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False)
     print('Starting WatchDog')
     dog.start()

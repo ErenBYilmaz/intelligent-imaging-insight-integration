@@ -23,13 +23,13 @@ class Image:
     def from_dcm_directory(cls, dcm_slices_dir: str, extra_metadata: Dict[str, Any] = None):
         dcm_slice_paths = [f for f in listdir_fullpath(dcm_slices_dir)
                            if os.path.isfile(f) and f.endswith('.dcm')]
-        nii_path = os.path.join(dcm_slices_dir, 'image.nii')
+        nii_path = os.path.join(dcm_slices_dir, 'image.nii.gz')
         reader = SimpleITK.ImageSeriesReader()
         reader.SetFileNames(dcm_slice_paths)
         s_image: SimpleITK.Image = reader.Execute()
         SimpleITK.WriteImage(s_image, nii_path)
         return Image(
             nii_path=nii_path,
-            base_dcm_dir=os.path.join(temporary_files_path, 'dcm_slices'),
+            base_dcm_dir=dcm_slices_dir,
             metadata=extra_metadata if extra_metadata is not None else {},
         )

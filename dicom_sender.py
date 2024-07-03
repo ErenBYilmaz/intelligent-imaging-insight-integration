@@ -88,53 +88,10 @@ class Sender:
 
 
 def main(config: SenderConfiguration):
-    # Configure logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger('pynetdicom')
-    logger.setLevel(logging.DEBUG)
-
-    # Unpack the configuration
-    input_directory = config.input_directory
-    pacs_address = config.pacs_address
-    pacs_port = config.pacs_port
-    pacs_aet = config.pacs_aet
-
-    # Set up the application entity (AE)
-    ae = AE()
-
-    # Add the requested presentation contexts
-    ae.requested_contexts = StoragePresentationContexts[:-1] + VerificationPresentationContexts
-
-    # Create an association with the PACS server
-    assoc = ae.associate(pacs_address, pacs_port, ae_title=pacs_aet)
-
-    if assoc.is_established:
-        logger.info(f"Association established with {pacs_address}:{pacs_port}")
-
-        # Iterate over all DICOM files in the input directory
-        for filename in os.listdir(input_directory):
-            if filename.endswith(".dcm"):
-                filepath = os.path.join(input_directory, filename)
-                logger.info(f"Sending DICOM file: {filepath}")
-
-                # Read the DICOM file
-                ds = dcmread(filepath)
-
-                # Send the DICOM file
-                status = assoc.send_c_store(ds)
-
-                # Check the status of the C-STORE operation
-                if status:
-                    logger.info(f"C-STORE request status: 0x{status.Status:04x}")
-                else:
-                    logger.error("Connection timed out, was aborted, or received invalid response")
-
-        # Release the association
-        assoc.release()
-        logger.info("Association released")
-    else:
-        logger.error("Failed to establish association")  #
+    sender = Sender(config)
+    sender.send_file(
+        r"C:\Users\Eren\Programme\intelligent-imaging-insight-integration\temporary_files\received_dicom_files\a83db7f7-0b26-49c2-a92f-484c5c06bc98\1.2.276.0.7230010.3.1.2.2831156000.1.1499097860.742568\1.2.276.0.7230010.3.1.3.2831156000.1.1499097860.742569\DummySegmentationGenerator.dcm")
 
 
 if __name__ == '__main__':
-    main(SendToNicosRaspberryPi())
+    main(SendToNicosOrthanC())
