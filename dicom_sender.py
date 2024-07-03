@@ -8,8 +8,7 @@ from pynetdicom import AE, StoragePresentationContexts, VerificationPresentation
 
 
 class SenderConfiguration:
-    def __init__(self, input_directory: str, pacs_address: str, pacs_port: int, pacs_aet: str):
-        self.input_directory = input_directory
+    def __init__(self, pacs_address: str, pacs_port: int, pacs_aet: str):
         self.pacs_address = pacs_address
         self.pacs_port = pacs_port
         self.pacs_aet = pacs_aet
@@ -17,26 +16,22 @@ class SenderConfiguration:
 
 class SendToLocalPython(SenderConfiguration):
     def __init__(self):
-        super().__init__(input_directory="resources/example_dcm",
-                         pacs_address='127.0.0.1',
-                         pacs_port=104,
-                         pacs_aet='PYTHON_AET', )
+        super().__init__(pacs_address='127.0.0.1', pacs_port=104, pacs_aet='PYTHON_AET')
+
+
+class SendToErensPython(SenderConfiguration):
+    def __init__(self):
+        super().__init__(pacs_address='192.168.10.142', pacs_port=104, pacs_aet='PYTHON_AET')
 
 
 class SendToNicosOrthanC(SenderConfiguration):
     def __init__(self):
-        super().__init__(input_directory="resources/example_dcm",
-                         pacs_address='192.168.10.200',
-                         pacs_port=104,
-                         pacs_aet='ORTHANCA', )
+        super().__init__(pacs_address='192.168.10.200', pacs_port=104, pacs_aet='ORTHANCA')
 
 
 class SendToNicosRaspberryPi(SenderConfiguration):
     def __init__(self):
-        super().__init__(input_directory="resources/example_dcm",
-                         pacs_address='192.168.10.203',
-                         pacs_port=104,
-                         pacs_aet='ORTHANCA', )
+        super().__init__(pacs_address='192.168.10.203', pacs_port=104, pacs_aet='ORTHANCA')
 
 
 class Sender:
@@ -60,6 +55,12 @@ class Sender:
                     self.send_file(filepath)
         else:
             logging.error("Failed to establish association")
+
+    def send_dir_and_subdirs(self, input_directory: str):
+        for root, dirs, files in os.walk(input_directory):
+            for file in files:
+                if file.endswith(".dcm"):
+                    self.send_file(os.path.join(root, file))
 
     def send(self, dcm_files: List[str]):
         if self.assoc.is_established:
