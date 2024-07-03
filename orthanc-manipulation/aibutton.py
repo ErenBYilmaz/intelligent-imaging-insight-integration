@@ -10,14 +10,18 @@ print('Hello world!')
 print('Hello world!')
 print('Hello world!')
 print('Hello world!')
-#with open('aibutton.js', 'r') as file:
+
+
+# with open('aibutton.js', 'r') as file:
 #    data = file.read()
 #    print(data)
+
 
 def ExecutePython(output, uri, **request):
     s = 'Python version: %s' % platform.python_version()
     print(request.__getitem__("body"))
     output.AnswerBuffer(s, 'text/plain')
+
 
 orthanc.RegisterRestCallback('/execute-python', ExecutePython)
 ##adds a jQuery-Trigger on document ready that checks for the existence of the sample button every given time intervall 
