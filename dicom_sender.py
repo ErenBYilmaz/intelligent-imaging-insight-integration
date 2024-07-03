@@ -96,5 +96,6 @@ def main():
     # sender.send_dir(r"C:\Users\Eren\Downloads\04-01-2000-abdomenw-15076\2.000000-arterial-99348")
     sender.send_dir(r"C:\Users\Eren\Downloads\04-01-2000-abdomenw-15076\300.000000-Segmentation-99191")
 
+
 if __name__ == '__main__':
     main()
