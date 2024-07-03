@@ -1,5 +1,7 @@
 import os
-import logging
+from typing import List
+
+from lib.my_logger import logging
 from pydicom import dcmread
 from pydicom.dataset import Dataset
 from pynetdicom import AE, StoragePresentationContexts, VerificationPresentationContexts
@@ -35,6 +37,54 @@ class SendToNicosRaspberryPi(SenderConfiguration):
                          pacs_address='192.168.10.203',
                          pacs_port=104,
                          pacs_aet='ORTHANCA', )
+
+
+class Sender:
+    def __init__(self, config: SenderConfiguration):
+        self.config = config
+        self.ae = AE('PYTHON_AET')
+        self.ae.requested_contexts = StoragePresentationContexts[:-1] + VerificationPresentationContexts
+        self.assoc = self.ae.associate(self.config.pacs_address, self.config.pacs_port, ae_title=self.config.pacs_aet)
+
+    def send_dir(self, input_directory: str):
+
+        # Create an association with the PACS server
+
+        if self.assoc.is_established:
+            logging.info(f"Association established with {self.config.pacs_address}:{self.config.pacs_port}")
+
+            # Iterate over all DICOM files in the input directory
+            for filename in os.listdir(input_directory):
+                if filename.endswith(".dcm"):
+                    filepath = os.path.join(input_directory, filename)
+                    self.send_file(filepath)
+        else:
+            logging.error("Failed to establish association")
+
+    def send(self, dcm_files: List[str]):
+        if self.assoc.is_established:
+            logging.info(f"Association established with {self.config.pacs_address}:{self.config.pacs_port}")
+
+            # Iterate over all DICOM files in the input directory
+            for file_path in dcm_files:
+                self.send_file(file_path)
+        else:
+            logging.error("Failed to establish association")
+
+    def __del__(self):
+        self.assoc.release()
+
+    def send_file(self, filepath):
+        logging.info(f"Sending DICOM file: {filepath}")
+        # Read the DICOM file
+        ds = dcmread(filepath)
+        # Send the DICOM file
+        status = self.assoc.send_c_store(ds)
+        # Check the status of the C-STORE operation
+        if status:
+            logging.info(f"C-STORE request status: 0x{status.Status:04x}")
+        else:
+            logging.error("Connection timed out, was aborted, or received invalid response")
 
 
 def main(config: SenderConfiguration):

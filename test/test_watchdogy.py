@@ -1,4 +1,5 @@
 import math
+import time
 import unittest
 
 from examples.tools.dummy.dummy import DummyImageProcessingTool
@@ -14,10 +15,17 @@ class TestWatchDog(unittest.TestCase):
         assert dog.latest_time_of_new_received_files != -math.inf
         assert len(dog.received_patient_ids()) > 0
 
-    def test_watching(self):
+    def test_modification_time(self):
         tool = DummyImageProcessingTool()
         dog = WatchDog(tool, base_received_images_path=temporary_files_path)
         assert len(dog.unprocessed_image_paths()) > 0
         assert not dog.nothing_received_for_60_seconds()
         dog.latest_time_of_new_received_files -= 61
         assert dog.nothing_received_for_60_seconds()
+
+    def test_watching(self):
+        tool = DummyImageProcessingTool()
+        dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=True)
+        print('Starting WatchDog')
+        dog.start()
+        time.sleep(2)
