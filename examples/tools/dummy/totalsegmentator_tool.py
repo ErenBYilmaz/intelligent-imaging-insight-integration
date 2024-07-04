@@ -10,7 +10,7 @@ from image import Image
 from image_processing_tool import ImageProcessingTool
 from totalsegmentator.python_api import totalsegmentator
 from paths import examples_path
-from processing_result import ProcessingResult, SegmentationResult
+from processing_result import ProcessingResult, SegmentationResult, MultipleResults
 
 
 class TotalSegmentator(ImageProcessingTool):
@@ -33,21 +33,22 @@ class TotalSegmentator(ImageProcessingTool):
         return False
 
     def process(self, images: List[Image]) -> ProcessingResult:
-        assert len(images) == 1
-        img = images[0]
-        mask_img_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output.nii.gz')
-        if not os.path.exists(mask_img_path):
-            subprocess.check_output(
-                ['python', r'C:\Users\Eren\Programme\intelligent-imaging-insight-integration\venv\Scripts\TotalSegmentator', '-i', img.nii_path, '-o', mask_img_path, '--ml', '--fast'])
-        processed_mask_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output_processed.nii.gz')
-        sitk_img = SimpleITK.ReadImage(mask_img_path)
-        a = SimpleITK.GetArrayFromImage(sitk_img)
-        a[a > 74] = 0
-        a[a > self.DISCARD_SEGMENTATIONS_ABOVE] = 0
-        processed_mask_img = SimpleITK.GetImageFromArray(a)
-        processed_mask_img.CopyInformation(sitk_img)
-        SimpleITK.WriteImage(processed_mask_img, processed_mask_path)
-        return self.segmentation_result(img, processed_mask_path)
+        results = []
+        for img in images:
+            mask_img_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output.nii.gz')
+            if not os.path.exists(mask_img_path):
+                subprocess.check_output(
+                    ['python', r'C:\Users\Eren\Programme\intelligent-imaging-insight-integration\venv\Scripts\TotalSegmentator', '-i', img.nii_path, '-o', mask_img_path, '--ml', '--fast'])
+            processed_mask_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output_processed.nii.gz')
+            sitk_img = SimpleITK.ReadImage(mask_img_path)
+            a = SimpleITK.GetArrayFromImage(sitk_img)
+            a[a > 74] = 0
+            a[a > self.DISCARD_SEGMENTATIONS_ABOVE] = 0
+            processed_mask_img = SimpleITK.GetImageFromArray(a)
+            processed_mask_img.CopyInformation(sitk_img)
+            SimpleITK.WriteImage(processed_mask_img, processed_mask_path)
+            results.append(self.segmentation_result(img, processed_mask_path))
+        return MultipleResults(tool_name=self.name(), results=results)
 
     def segmentation_result(self, img, mask_img_path):
         return SegmentationResult(tool_name=self.name(),

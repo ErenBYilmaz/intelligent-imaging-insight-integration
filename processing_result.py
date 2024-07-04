@@ -113,3 +113,13 @@ class PDFResult(ProcessingResult):
     def to_dicom(self) -> List[str]:
         proc = PDF2DCMProcessor()
         return proc.fit(pdf_file_path=self.pdf_path, dcm_template_file_path=...)
+
+
+class MultipleResults(ProcessingResult):
+    def __init__(self, tool_name: str, results: List[ProcessingResult]):
+        super().__init__(tool_name)
+        self.results = results
+
+    def to_dicom(self) -> List[str]:
+        return [dcm_path for result in self.results
+                for dcm_path in result.to_dicom()]

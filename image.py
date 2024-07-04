@@ -21,10 +21,9 @@ class Image:
 
     @classmethod
     def from_dcm_directory(cls, dcm_slices_dir: str, extra_metadata: Dict[str, Any] = None):
-        # dcm_slice_paths = cls._dcm_slice_paths(dcm_slices_dir)
         nii_path = os.path.join(dcm_slices_dir, 'image.nii.gz')
         reader = SimpleITK.ImageSeriesReader()
-        reader.SetFileNames(reader.GetGDCMSeriesFileNames(dcm_slices_dir))
+        reader.SetFileNames(cls._dcm_slice_paths(dcm_slices_dir))
         s_image: SimpleITK.Image = reader.Execute()
         SimpleITK.WriteImage(s_image, nii_path)
         return Image(
@@ -35,8 +34,7 @@ class Image:
 
     @classmethod
     def _dcm_slice_paths(cls, dcm_slices_dir):
-        return [f for f in listdir_fullpath(dcm_slices_dir)
-                if os.path.isfile(f) and f.endswith('.dcm')]
+        return SimpleITK.ImageSeriesReader.GetGDCMSeriesFileNames(dcm_slices_dir)
 
     def dcm_slice_paths(self):
         return self._dcm_slice_paths(self.base_dcm_dir)

@@ -4,7 +4,7 @@ import time
 from math import inf
 from typing import Set, Optional
 
-from dicom_sender import SenderConfiguration, Sender
+from dicom_sender import SenderConfiguration, Sender, SendToNicosOrthanC
 from examples.tools.dummy.dummy import DummySegmentationGenerator
 from examples.tools.dummy.totalsegmentator_tool import TotalSegmentator
 from image import Image
@@ -27,6 +27,7 @@ class WatchDog(threading.Thread):
         self.image_processing_tool = image_processing_tool
         self.base_received_images_path = base_received_images_path
         self.known_received_files: Set[str] = set()
+        self.known_directories: Set[str] = set()
         self.latest_time_of_new_received_files = -inf
         self.send_to = send_to
 
@@ -69,9 +70,16 @@ class WatchDog(threading.Thread):
                 study_path = os.path.join(patient_path, study_id)
                 for series_id in os.listdir(study_path):
                     series_path = os.path.join(study_path, series_id)
-                    if os.path.isfile(self.processing_note_path(series_path)):
+                    if series_path in self.known_directories:
                         continue
-                    for file in listdir_fullpath(series_path):
+                    if os.path.isfile(self.processing_note_path(series_path)):
+                        self.known_directories.add(series_path)
+                        continue
+                    slices = Image._dcm_slice_paths(series_path)
+                    if len(slices) == 0:
+                        self.known_directories.add(series_path)
+                        continue
+                    for file in slices:
                         if file not in self.known_received_files:
                             logging.info(f'New file received: {file}')
                             self.known_received_files.add(file)
@@ -92,7 +100,9 @@ class WatchDog(threading.Thread):
 
 def main():
     tool = TotalSegmentator()
-    dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False)
+    # sender = None
+    sender = Sender(SendToNicosOrthanC())
+    dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False, send_to=sender)
     print('Starting WatchDog')
     dog.start()
 
