@@ -1,6 +1,6 @@
 # (i²)² Framework
 
-The (i²)² Framework is a collection of tools for deploying AI-based image processing tools in a healthcare environment.
+The (i²)² Framework (intelligent imaging insight integration) is a collection of tools for deploying AI-based image processing tools in a healthcare environment.
 The framework is designed to be modular and flexible, allowing for easy integration with existing systems.
 It communicates with PACS systems via standard DICOM protocols and provides tools to convert between common file
 formats (DICOM Images, DICOM-Seg, nifti, numpy, SimpleITK).
