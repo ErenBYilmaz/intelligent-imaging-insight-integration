@@ -19,7 +19,7 @@ class WatchDog(threading.Thread):
                  image_processing_tool: ImageProcessingTool,
                  interval=1.,
                  base_received_images_path='temporary_files/received_dicom_files',
-                 send_to: Optional[Sender] = None,
+                 send_to: Optional[SenderConfiguration] = None,
                  daemon=False):
         threading.Thread.__init__(self, daemon=daemon)
         self.interval = interval
@@ -51,7 +51,7 @@ class WatchDog(threading.Thread):
                         dcm_paths = result.to_dicom()
                         logging.info(f'Done converting to dicom. Created {dcm_paths}')
                         if self.send_to is not None:
-                            self.send_to.send(dcm_paths)
+                            Sender(self.send_to).send(dcm_paths)
                     for image_path in filtered_paths:
                         open(self.processing_note_path(image_path), 'a').close()
             time.sleep(self.interval)
@@ -101,8 +101,9 @@ class WatchDog(threading.Thread):
 def main():
     tool = TotalSegmentator()
     # sender = None
-    sender = Sender(SendToNicosOrthanC())
-    dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False, send_to=sender)
+    config = SendToNicosOrthanC()
+    # sender = Sender(config)
+    dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False, send_to=config)
     print('Starting WatchDog')
     dog.start()
 
