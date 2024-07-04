@@ -6,6 +6,7 @@ from typing import Set, Optional
 
 from dicom_sender import SenderConfiguration, Sender
 from examples.tools.dummy.dummy import DummySegmentationGenerator
+from examples.tools.dummy.totalsegmentator_tool import TotalSegmentator
 from image import Image
 from image_processing_tool import ImageProcessingTool
 from lib.my_logger import logging
@@ -88,7 +89,7 @@ class WatchDog(threading.Thread):
 
 
 def main():
-    tool = DummySegmentationGenerator()
+    tool = TotalSegmentator()
     dog = WatchDog(tool, base_received_images_path=temporary_files_path, daemon=False)
     print('Starting WatchDog')
     dog.start()

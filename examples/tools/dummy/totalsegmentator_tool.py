@@ -1,4 +1,5 @@
 import os
+import subprocess
 from importlib.metadata import version
 from typing import List
 
@@ -33,7 +34,8 @@ class TotalSegmentator(ImageProcessingTool):
         assert len(images) == 1
         img = images[0]
         mask_img_path = 'total_segmentator_output.nii.gz'
-        totalsegmentator(img.nii_path, mask_img_path)
+        subprocess.check_output(['TotalSegmentator', '-i', img.nii_path, '-o', mask_img_path])
+        # totalsegmentator(img.nii_path, mask_img_path)
         return SegmentationResult(tool_name=self.name(),
                                   segmentation_nii_path=mask_img_path,
                                   template_json_path=os.path.join(examples_path, 'totalsegmentator_dcm_seg_template.json'),
