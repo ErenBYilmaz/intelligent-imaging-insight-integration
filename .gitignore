@@ -1,3 +1,5 @@
 .idea
 temporary_files
 *.log
+venv
+__pycache__
