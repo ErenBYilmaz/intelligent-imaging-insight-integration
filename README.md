@@ -17,6 +17,10 @@ Thus, with minimal effort it should be possible to connect it to other PACS syst
 5. The python framework sends the results back to the PACS system.
 6. The user can view the results in the PACS system.
 
+## Software architecture draft
+
+![architecture_draft.svg](notes/architecture_draft.svg)
+
 ## How to connect an image processing tool to a PACS
 
 (Instructions unfinished, use at own risk)
