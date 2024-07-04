@@ -1,8 +1,8 @@
-logging
-os
 pynetdicom
-threading
-time
-math
-typing
-paths
+pydicom_seg
+cachetools
+tabulate
+hanging_threads
+pdf2dcm
+colormath
+totalsegmentator==1.5.6

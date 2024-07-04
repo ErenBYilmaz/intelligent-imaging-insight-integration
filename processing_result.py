@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import random
 from typing import Dict, Any, List, Union
@@ -27,11 +28,13 @@ class SegmentationResult(ProcessingResult):
                  segmentation_nii_path: str,
                  metadata: Dict[str, Any] = None,
                  template_json_path: str = None,
-                 base_dcm_dir_path: str = None, ):
+                 base_dcm_dir_path: str = None,
+                 ignore_segmentations_above=2 ** 32):
         super().__init__(tool_name, metadata)
         self.segmentation_nii_path = segmentation_nii_path
         self.template_json_path = template_json_path
         self.base_dcm_dir_path = base_dcm_dir_path
+        self.ignore_segmentations_above = ignore_segmentations_above
 
     def dcm_paths(self, base_dcm_dir_path):
         return SimpleITK.ImageSeriesReader.GetGDCMSeriesFileNames(base_dcm_dir_path)
@@ -44,8 +47,8 @@ class SegmentationResult(ProcessingResult):
         metadata_reader.ReadImageInformation()
         return metadata_reader
 
-    def dcm_seg_template(self,
-                         dcm_image_metadata: Union[SimpleITK.Image, SimpleITK.ImageFileReader]):
+    def dcm_seg_template(self):
+        dcm_image_metadata = self.read_dcm_metadata(self.base_dcm_dir_path)
         with open(self.template_json_path) as f:
             template_dict = json.load(f)
         tag_map = {
@@ -67,6 +70,7 @@ class SegmentationResult(ProcessingResult):
         assert isinstance(template_dict['SeriesNumber'], str)
         template_dict['SeriesNumber'] = str(random.randint(int(template_dict['SeriesNumber']) + 1,
                                                            int(template_dict['SeriesNumber']) + 2 ** 20))
+        template_dict["segmentAttributes"][0] = template_dict["segmentAttributes"][0][:self.ignore_segmentations_above]
         template = pydicom_seg.template.from_dcmqi_metainfo(template_dict)
         return template
 
@@ -78,11 +82,9 @@ class SegmentationResult(ProcessingResult):
         Source https://razorx89.github.io/pydicom-seg/guides/write.html
         """
         to_dcm_seg_path = self.output_dcm_seg_path()
-        # dcm_image = self.read_dcm(base_dcm_dir_path)
-        dcm_image_metadata = self.read_dcm_metadata(self.base_dcm_dir_path)
 
         writer = pydicom_seg.MultiClassWriter(
-            template=self.dcm_seg_template(dcm_image_metadata),
+            template=self.dcm_seg_template(),
             inplane_cropping=False,
             skip_empty_slices=False,
             skip_missing_segment=False,
