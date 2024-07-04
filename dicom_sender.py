@@ -95,7 +95,8 @@ def main():
     # sender.send_dir(r"C:\Users\Eren\Programme\intelligent-imaging-insight-integration\resources\example_dcm")
     # sender.send_file(r"C:\Users\Eren\Programme\intelligent-imaging-insight-integration\temporary_files\received_dicom_files\11791306742903\1.2.276.0.50.192168001092.11156604.14547392.4\1.2.276.0.50.192168001092.11156604.14547392.195\DummySegmentationGenerator.dcm")
     # sender.send_dir(r"C:\Users\Eren\Downloads\04-01-2000-abdomenw-15076\2.000000-arterial-99348")
-    sender.send_dir(r"C:\Users\Eren\Downloads\04-01-2000-abdomenw-15076\300.000000-Segmentation-99191")
+    # sender.send_dir(r"C:\Users\Eren\Downloads\04-01-2000-abdomenw-15076\300.000000-Segmentation-99191")
+    sender.send_dir(r"C:\Users\Eren\Downloads\test_dicom_seg")
 
 
 if __name__ == '__main__':
