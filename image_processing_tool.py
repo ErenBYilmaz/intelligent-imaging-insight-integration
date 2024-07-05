@@ -26,7 +26,7 @@ class ImageProcessingTool:
     def process(self, images: List[Image]) -> ProcessingResult:
         raise NotImplementedError('Abstract method')
 
-    def mask_to_image(self, mask, base_image: SimpleITK.Image):
+    def mask_to_image(self, mask, base_image: SimpleITK.Image) -> Image:
         mask_img = SimpleITK.GetImageFromArray(mask)
         mask_img.SetSpacing(base_image.GetSpacing())
         mask_img.SetOrigin(base_image.GetOrigin())

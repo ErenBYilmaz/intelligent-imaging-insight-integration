@@ -8,7 +8,6 @@ import pydicom
 
 from image import Image
 from image_processing_tool import ImageProcessingTool
-from totalsegmentator.python_api import totalsegmentator
 from paths import examples_path
 from processing_result import ProcessingResult, SegmentationResult, MultipleResults
 
