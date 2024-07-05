@@ -1,8 +1,7 @@
 import os.path
 import unittest
 
-from examples.tools.dummy.dummy import DummyImageProcessingTool
-from examples.tools.dummy.totalsegmentator_tool import TotalSegmentator
+from examples.tools.totalsegmentator_tool import TotalSegmentator
 from paths import resources_path
 
 

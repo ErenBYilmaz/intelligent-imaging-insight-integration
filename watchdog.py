@@ -5,12 +5,10 @@ from math import inf
 from typing import Set, Optional
 
 from dicom_sender import SenderConfiguration, Sender, SendToNicosOrthanC
-from examples.tools.dummy.dummy import DummySegmentationGenerator
-from examples.tools.dummy.totalsegmentator_tool import TotalSegmentator
+from examples.tools.totalsegmentator_tool import TotalSegmentator
 from image import Image
 from image_processing_tool import ImageProcessingTool
 from lib.my_logger import logging
-from lib.util import listdir_fullpath
 from paths import temporary_files_path
 
 
