@@ -4,3 +4,4 @@ temporary_files
 venv
 __pycache__
 .cache
+*#

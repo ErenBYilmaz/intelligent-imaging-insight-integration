@@ -1,7 +1,8 @@
 # (i²)² Framework
 
-The (i²)² Framework (intelligent imaging insight integration) is a collection of tools for deploying AI-based image processing tools in a healthcare environment.
-The framework is designed to be modular and flexible, allowing for easy integration with existing systems.
+The (i²)² Framework (intelligent imaging insight integration) is a collection of tools for deploying AI-based image
+processing tools in a healthcare environment.
+The framework is designed to be modular and flexible, allowing for easy integration with existing systems and ai-based or non-ai-based automated image processing methods.
 It communicates with PACS systems via standard DICOM protocols and provides tools to convert between common file
 formats (DICOM Images, DICOM-Seg, nifti, numpy, SimpleITK).
 We were able to get it running in connection with the Orthanc PACS system including the OHIF Image viewer, but without
@@ -25,17 +26,15 @@ Thus, with minimal effort it should be possible to connect it to other PACS syst
 
 ## How to connect an image processing tool to a PACS
 
-(Instructions unfinished, use at own risk)
-
 1. Clone this repository
 2. Create a subclass of ImageProcessingResult or pick an existing one for storing the results (For example
    SegmentationResult)
 3. Create a subclass of ImageProcessingTool that implements the (AI-based or other) image processing and outputs the
    ImageProcessingResult from step 2. You may want to have a look at the methods in the ImageProcessingTool, Image, and
    ProcessingResult classes to see if something already fits your needs (e.g. conversion between data formats).
-4. (optional?) Put everything in a docker container
-5. Create a subclass of SenderConfiguration to specify where the results should be sent to (port, ip and AET-name of the
+4. Create a subclass of SenderConfiguration to specify where the results should be sent to (port, ip and AET-name of the
    PACS system)
+5. (optional) Put everything in a docker container
 6. Start dicom_receiver.py to be able to receive images (you may want to adjust the port and AET-name in there as well)
 7. Edit watchdog.py to use your ImageProcessingTool and SenderConfiguration from steps 3 and 5
 8. Start watchdog.py that will watch for newly received images, process them and send them back to the PACS system
