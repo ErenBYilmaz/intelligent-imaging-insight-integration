@@ -37,8 +37,11 @@ class TotalSegmentator(ImageProcessingTool):
         for img in images:
             mask_img_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output.nii.gz')
             if not os.path.exists(mask_img_path):
-                subprocess.check_output(
-                    ['python', r'C:\Users\Eren\Programme\intelligent-imaging-insight-integration\venv\Scripts\TotalSegmentator', '-i', img.nii_path, '-o', mask_img_path, '--ml', '--fast'])
+                nii_dir = os.path.dirname(img.nii_path)
+                nii_name = os.path.basename(img.nii_path)
+                # Official command "docker run --gpus 'device=0' --ipc=host -v /absolute/path/to/my/data/directory:/tmp wasserth/totalsegmentator:2.2.1 TotalSegmentator -i /tmp/ct.nii.gz -o /tmp/segmentations"
+                # subprocess.check_output(['docker', 'run', '--gpus', 'all', '--ipc=host', f'-v "{nii_dir}":/nii"', f'-v "{img.base_dcm_dir}":/dcm', f'wasserth/totalsegmentator:2.2.1', f'TotalSegmentator', f'-i /nii/{nii_name}', f'-o /dcm/total_segmentator_output.nii.gz', f'--rm', '--ml', '--fast'])
+                subprocess.check_output([r'C:\ProgramData\Anaconda3\envs\Scripts\totalsegmentator', '-i', img.nii_path, '-o', mask_img_path, '--ml', '--fast'])
             processed_mask_path = os.path.join(img.base_dcm_dir, 'total_segmentator_output_processed.nii.gz')
             sitk_img = SimpleITK.ReadImage(mask_img_path)
             a = SimpleITK.GetArrayFromImage(sitk_img)

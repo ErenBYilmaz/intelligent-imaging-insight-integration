@@ -1,0 +1,24 @@
+{
+  "Name" : "${ORTHANC_NAME} in Docker Compose",
+  "RemoteAccessAllowed" : true,
+
+  "AuthenticationEnabled": false,
+
+  "OHIF": {
+    "RouterBasename": "/ohif/",
+    "DataSource" : "dicom-web"
+  },
+  "DicomWeb" : {
+    "Enable" : true,
+    "Root": "/dicom-web/"
+  },
+  "RegisteredUsers": {
+    "demo": "demo"
+  },
+  "PostgreSQL": {
+    "Host": "orthanc-index"
+  },
+  "DicomModalities" : {
+    "PYTHON_AET":  [ "PYTHON_AET", "host.docker.internal", 104]
+  }
+}
